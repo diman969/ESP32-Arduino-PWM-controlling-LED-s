@@ -1,35 +1,27 @@
 #include <Arduino.h>
-#define firstLedPin 16
-#define secondLedPin 17
-#define firstLedChannel 0
-#define secondLedChannel  2
-#define frequency 5000
-#define resolution 8
+#define FIRST_LED 16
+#define PWM_CHANNEL 0
+#define FREQUENCY 5000
+#define RESOLUTION 8
 
 void setup() {
   // put your setup code here, to run once:
-  ledcSetup(firstLedChannel, frequency, resolution);
-  ledcSetup(secondLedChannel, frequency, resolution);
-
-  ledcAttachPin(firstLedPin, firstLedChannel);
-  ledcAttachPin(secondLedPin, secondLedChannel);
-  
+  ledcSetup(PWM_CHANNEL, FREQUENCY, RESOLUTION);
+  ledcAttachPin(FIRST_LED, PWM_CHANNEL);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  for(int dutyCycle = 0, secondDutyCycle = 255; dutyCycle <= 255; dutyCycle++, secondDutyCycle--){   
+  for(int dutyCycle = 0; dutyCycle <= 255; dutyCycle+=2){   
     // changing the LED brightness with PWM
-    ledcWrite(firstLedChannel, dutyCycle);
-    ledcWrite(secondLedChannel, secondDutyCycle);
-    delay(15);
+    ledcWrite(PWM_CHANNEL, dutyCycle);
+    delay(5);
   }
 
   // decrease the LED brightness
-  for(int dutyCycle = 255, secondDutyCycle = 0; dutyCycle >= 0; dutyCycle--, secondDutyCycle++){
+  for(int dutyCycle = 255; dutyCycle >= 0; dutyCycle-=2){
     // changing the LED brightness with PWM
-    ledcWrite(firstLedChannel, dutyCycle);   
-    ledcWrite(secondLedChannel, secondDutyCycle);
-    delay(15);
+    ledcWrite(PWM_CHANNEL, dutyCycle);   
+    delay(5);
   }
 }
